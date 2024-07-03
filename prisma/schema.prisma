@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "mysql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+model blogs {
+  id                     Int        @id @default(autoincrement()) @db.UnsignedInt
+  blogauthorid            Int?              @db.UnsignedInt
+  blogauthor              profiles?      @relation(fields: [blogauthorid], references: [id], onDelete: Restrict)
+  blogapproverid            Int?              @db.UnsignedInt
+  blogapprover              profiles?      @relation(name: "approver", fields: [blogapproverid], references: [id], onDelete: Restrict)
+  blogtitle String @db.VarChar(100)
+  blogsubtitle String @default("") @db.VarChar(255)
+  blogcontent String @db.Text
+  blogfeaturedimageuri String @default("") @db.VarChar(255)
+  bloglikes Int @default(0) @db.UnsignedInt
+  blogshares Int @default(0) @db.UnsignedInt
+  blogstatus blogStatus @default(archive)
+  approvedat              DateTime?  @db.DateTime()
+  approved               Boolean    @default(false)
+  createdat              DateTime   @default(now())
+  updatedat              DateTime?  @db.DateTime()
+  deletedat              DateTime?  @db.DateTime()
+  deleted                Boolean    @default(false)
+}
+
+model users {
+  id                     Int        @id @default(autoincrement()) @db.UnsignedInt
+  emailaddress               String     @unique @db.VarChar(50)
+  password               String     @db.VarChar(100)
+  createdat              DateTime   @default(now())
+  updatedat              DateTime?  @db.DateTime()
+  deletedat              DateTime?  @db.DateTime()
+  lastlogin              DateTime?  @db.DateTime()
+  deleted                Boolean    @default(false)
+  status                 userStatus @default(active)
+  profile                profiles?
+}
+
+model profiles {
+  id                     Int               @id @default(autoincrement()) @db.UnsignedInt
+  userid                 Int               @unique @db.UnsignedInt
+  user                   users             @relation(fields: [userid], references: [id], onDelete: Restrict)
+  firstname              String            @db.VarChar(50)
+  lastname               String            @db.VarChar(50)
+  mobile                 String            @db.VarChar(20)
+  avataruri              String            @default("") @db.VarChar(200)
+  profiletype            profileType       @default(employee)
+  createdat              DateTime          @default(now())
+  updatedat              DateTime?         @db.DateTime()
+  deletedat              DateTime?         @db.DateTime()
+  deleted                Boolean           @default(false)
+  blogs  blogs[]     
+  approvedblogs   blogs[]     @relation(name: "approver")
+}
+
+enum profileType {
+  employee
+  nonemployee
+  admin
+}
+
+enum userStatus {
+  active
+  inactive
+  pending
+  suspended
+  disabled
+}
+
+enum blogStatus {
+  public
+  archive
+  draft
+  pendingdelete
+}

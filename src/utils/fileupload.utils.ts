@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import { S3 } from "@aws-sdk/client-s3";
 
-export const UploadFileToDigitalOceanSpaces = async (filePath: string, key: string, dir = '', Metadata?: Record<string, string>): Promise<any> => {
+export const UploadFileToAWSS3 = async (filePath: string, key: string, dir = '', Metadata?: Record<string, string>): Promise<any> => {
   try {
     const s3 = new S3({    
       region: `${process.env.AWS_DEFAULT_REGION}`,

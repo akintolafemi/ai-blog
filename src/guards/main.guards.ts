@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from "@nestjs/common";
 
+//default guard that checks if default bearer token is in request header and that it is valid
 @Injectable()
 export default class MainGuard implements CanActivate {
 

@@ -3,10 +3,12 @@ import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsString, MinLength } from 
 import { PROFILE_TYPES } from "src/constants/auth.constants";
 import { profileType } from "src/types/auth.type";
 
+
+//create sign up rule
 export class SignUpDto {
   @IsEmail()
   @IsNotEmpty()
-  emailaddress: string
+  emailaddress: string //emailaddress is expected, and must be valid email and by extension, a string
 
   @IsString()
   @IsNotEmpty()
@@ -14,7 +16,7 @@ export class SignUpDto {
     message: 'password must be a minimum of 8 alphanumeric characters'
   })
   @ValidatePassword()
-  password: string
+  password: string //passowrd is expected, minimum of 8 characters
 
   @IsString()
   @IsNotEmpty()
@@ -26,11 +28,11 @@ export class SignUpDto {
 
   @IsPhoneNumber()
   @IsNotEmpty()
-  mobile: string
+  mobile: string //must be valid phone number with country code
 
   @IsNotEmpty()
   @IsEnum(PROFILE_TYPES, {
     message: `profile type must be one of ${PROFILE_TYPES.toString()}`
   })
-  profiletype: profileType
+  profiletype: profileType //profile type must be one of "employee" | "nonemployee" | "admin""
 }

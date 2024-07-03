@@ -11,13 +11,13 @@ export class AuthController {
   constructor(private readonly service: AuthService) {}
 
   //sign in endpoint
-  @UseGuards(MainGuard)
+  @UseGuards(MainGuard) //ensure request coming in has the default bearer token
   @Post(`/signin`)
   public async SignIn() {
     return this.service.signJWT();
   }
 
-  @Roles([ADMIN])
+  @Roles([ADMIN]) //only an admin employee can access this endpoint since assessment doesn't specify sign up mode for users. So company admin users can do account creation for both employees and non employees that'd like to create blog posts
   @UseGuards(RolesGuard)
   @Post(`/signup`)
   public async CreateUser(@Body() req: SignUpDto) {

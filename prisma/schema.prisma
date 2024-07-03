@@ -5,12 +5,14 @@ generator client {
   provider = "prisma-client-js"
 }
 
+//Prisma is configured to use prisma accelerate.
 datasource db {
   provider  = "mysql"
-  url       = env("DATABASE_URL")
+  url       = env("DATABASE_URL") 
   directUrl = env("DIRECT_DATABASE_URL")
 }
 
+//define blogs table
 model blogs {
   id                     Int        @id @default(autoincrement()) @db.UnsignedInt
   blogauthorid            Int?              @db.UnsignedInt
@@ -32,6 +34,7 @@ model blogs {
   deleted                Boolean    @default(false)
 }
 
+//define users table
 model users {
   id                     Int        @id @default(autoincrement()) @db.UnsignedInt
   emailaddress               String     @unique @db.VarChar(50)
@@ -45,6 +48,7 @@ model users {
   profile                profiles?
 }
 
+//define profiles table
 model profiles {
   id                     Int               @id @default(autoincrement()) @db.UnsignedInt
   userid                 Int               @unique @db.UnsignedInt

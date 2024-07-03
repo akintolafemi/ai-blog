@@ -18,6 +18,7 @@ export class BlogsService {
 
   async CreateBlog(req: CreateBlogDto): Promise<standardResponse | HttpException> {
     try {
+      //check who is creating the post to set other necessary data such as approve status of the blog
       const isEmployee = this.request.user.profile.profiletype === "employee" || this.request.user.profile.profiletype === "admin"
 
       const blog = await this.prismaService.blogs.create({
@@ -33,7 +34,7 @@ export class BlogsService {
 
       //may notify newsletter users of new post
       if (this.request.user.profile.profiletype === "employee") {
-        
+        //for a full fledged app, we may dispatch an event using EventEmitter to send emails to all users subscrived to newsletter
       }
 
       return ResponseManager.standardResponse({ //send out response if everything works well
@@ -43,7 +44,7 @@ export class BlogsService {
         data: blog
       })
 
-    } catch (error) {
+    } catch (error) { //handle error response
       throw new HttpException({
         message: error?.response || "Unknown error has occured",
         statusText: "error",
@@ -87,7 +88,7 @@ export class BlogsService {
         where: {
           id,
         }, include: {
-          blogapprover: {
+          blogapprover: { //join blog author and select basic details
             select: {
               id: true,
               firstname: true,
@@ -103,8 +104,8 @@ export class BlogsService {
           }
         }
       })
-
-      if (!blog) 
+      
+      if (!blog)  //properly define and handle error message when blog is not found
         throw new HttpException("Blog does not exist", HttpStatus.NOT_FOUND, {
           cause: `Invalid id - ${id} in url`, 
           description: `Blog with id - ${id} does not exist`
@@ -129,9 +130,11 @@ export class BlogsService {
 
   public async GetAllBlogs(req: QueryBlogsDto): Promise<paginatedResponse | HttpException> {
     try {
-      const { paginationReq, limit, page } = PaginationRequest(req);
-      const filter = FilterRequestObject(req, BLOGS_FILTER_KEYS);
+      const { paginationReq, limit, page } = PaginationRequest(req); //create pagination rule for sql select
+      const filter = FilterRequestObject(req, BLOGS_FILTER_KEYS); //create filter (where clause) for sql based on request fields and transformations
       
+      //BLOGS_FILTER_KEYS-> array of expected fields from frontend
+
       const data = await this.prismaService.blogs.findMany({
         where: {
           ...filter

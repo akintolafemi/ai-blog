@@ -30,32 +30,32 @@ BigInt.prototype.toJSON = function () {
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    ThrottlerModule.forRoot([{
+    ThrottlerModule.forRoot([{ //configure rate limit to prevent brute-force attacks
       ttl: 20000,
       limit: 5,  //1 request per 5secs
     }]),
-    // CacheModule.register<RedisClientOptions>({
+    // CacheModule.register<RedisClientOptions>({ //uncomment to use caching with redis
     //   ttl: 10,
     //   // store: redisStore,
       
     // }),
     AuthModule,
     PrismaModule,
-    JwtModule.register({
-      global: true,
-      secret: `${process.env.JWT_SECRET}`,
-      secretOrKeyProvider(requestType, tokenOrPayload, options) {
+    JwtModule.register({ //handle/configure JWT rules
+      global: true, 
+      secret: `${process.env.JWT_SECRET}`, 
+      secretOrKeyProvider(requestType, tokenOrPayload, options) {  //configure private and public keys to encrypt and decrypt tokens
           switch (requestType) {
             case JwtSecretRequestType.SIGN:
-              return fs.readFileSync(`./private.pem`)
+              return fs.readFileSync(`./private.pem`) //private key to encrypt
             case JwtSecretRequestType.VERIFY:
-              return fs.readFileSync(`./public.pem`)
+              return fs.readFileSync(`./public.pem`) //public key to decrypt
             default:
               return null;
           }
       },
       signOptions: {
-        algorithm: "RS256",
+        algorithm: "RS256", //jwt algorithm
         issuer: `${process.env.ISSUER}`,
         subject: `${process.env.ISSUER}`
       }
@@ -79,10 +79,10 @@ BigInt.prototype.toJSON = function () {
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
     consumer
-      .apply(RouteLogger)
+      .apply(RouteLogger) //use logger for all endpoints... see full functionality in the path @middlewares/route.logger.middleware
       .forRoutes("*")
-      .apply(AuthMiddleware)
+      .apply(AuthMiddleware) //add a middleware to check user login details before proceeding to sign in service
       .forRoutes("auth/signin")
-      .apply(SignUpMiddleware)
+      .apply(SignUpMiddleware) //add a middleware to check sign up data before proceeding to sign up service
       .forRoutes("auth/signup")
   }}

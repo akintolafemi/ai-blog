@@ -37,7 +37,7 @@ export class UpdateBlogDto extends CommonDto {
 
 export class QueryBlogsDto extends GlobalFilterDto {
   @IsOptional()
-  @Transform(({ value }) => TransformToMySQLInArray(value, "blogapproverid"))
+  @Transform(({ value }) => TransformToMySQLInArray(value, "blogapproverid")) //tranform the value sent from frontend
   blogapproverid: string
 
   @IsOptional()

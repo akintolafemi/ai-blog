@@ -10,7 +10,7 @@ export class SignUpMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    const { emailaddress, mobile, profiletype } = req.body;
+    const { emailaddress, mobile } = req.body;
     if (!emailaddress) {
       throw new HttpException({
         message: "email address is missing in request",

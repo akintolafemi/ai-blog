@@ -16,6 +16,7 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
+  //since username and password are already validated in AuthMiddleware, we can proceed to generate signed JWT token for user
   async signJWT() {
     const payload = {
       emailaddress: this.request.user.emailaddress,
@@ -40,7 +41,7 @@ export class AuthService {
   async CreateUser(req: SignUpDto & {userexist?: true}): Promise<standardResponse | HttpException> {
     try {
       
-      const password = await bcrypt.hash(req.password, BCRYPT_HASH_ROUNDS); //hash the password
+      const password = await bcrypt.hash(req.password, BCRYPT_HASH_ROUNDS); //hash the password using bcrypt
       const user =  await this.prismaService.users.create({ //save user login to db
         data: {
           emailaddress: req.emailaddress,
@@ -61,6 +62,7 @@ export class AuthService {
         }
       })
 
+      //generate a signed JWT so frontend can auto redirect users to dashboard or other frontend app page instead of going back to login page
       const token = this.jwtService.sign({
         emailaddress: req.emailaddress,
         id: user.id

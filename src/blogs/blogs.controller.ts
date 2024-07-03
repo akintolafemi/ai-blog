@@ -15,14 +15,14 @@ export class BlogsController {
     private readonly service: BlogsService
   ) {}
 
-  @UseGuards(MainGuard)
+  @UseGuards(MainGuard)  //any user can access endpoint but with default bearer token
   @Get(``)
   public async GetAllBlogs(@Query() request: QueryBlogsDto) {
     return this.service.GetAllBlogs(request);
   }
 
-  @Roles(ALL_ROLES)
-  @UseGuards(RolesGuard)
+  @Roles(ALL_ROLES) //all users regardless of status or type can create blog
+  @UseGuards(RolesGuard) //validate the user jwt token
   @Post(``)
   public async CreateBlog(@Body() req: CreateBlogDto) {
     return this.service.CreateBlog(req);
@@ -34,15 +34,15 @@ export class BlogsController {
     return this.service.GetBlog(Number(id));
   }
 
-  @Roles(ALL_ROLES)
-  @ManageBlogsRole({requestSource: "param", key: "id"})
+  @Roles(ALL_ROLES) //all users can access this endpoint
+  @ManageBlogsRole({requestSource: "param", key: "id"}) //add an extra security later to ensure a user updating a post actually owns the post
   @UseGuards(RolesGuard, ManageBlogGuard)
   @Patch(`/:id`)
   public async UpdateBlog(@Param("id") id: string, @Body() req: UpdateBlogDto) {
     return this.service.UpdateBlog(Number(id), req);
   }
 
-  @Roles(ALL_ROLES)
+  @Roles(ALL_ROLES) //same validations as update endpoint
   @ManageBlogsRole({requestSource: "param", key: "id"})
   @UseGuards(RolesGuard, ManageBlogGuard)
   @Delete(`/:id`)
@@ -50,14 +50,14 @@ export class BlogsController {
     return this.service.DeleteBlog(Number(id));
   }
 
-  @Roles([ADMIN])
+  @Roles([ADMIN]) //only admin employees can approve a blog post
   @UseGuards(RolesGuard)
   @Put(`/approve/:id`)
   public async ApproveBlog(@Param("id") id: string) {
     return this.service.ApproveBlog(Number(id));
   }
 
-  @Roles([ADMIN])
+  @Roles([ADMIN]) //only an admin employee can approve a blog post for delete
   @UseGuards(RolesGuard)
   @Delete(`/delete/:id`)
   public async ApproveDelete(@Param("id") id: string) {

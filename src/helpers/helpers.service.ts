@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UploadFileToDigitalOceanSpaces } from '@utils/fileupload.utils';
+import { UploadFileToAWSS3 } from '@utils/fileupload.utils';
 import { ResponseManager } from '@utils/response.manager.utils';
 
 @Injectable()
 export class HelpersService {
   public async uploadFile(file: Express.Multer.File) {
     try {
-      const upload = await UploadFileToDigitalOceanSpaces(file.path, file.originalname, 'documents/');
+      const upload = await UploadFileToAWSS3(file.path, file.originalname, 'documents/');
       const result = {
         ...upload,
         size: file.size,

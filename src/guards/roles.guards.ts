@@ -4,6 +4,7 @@ import { JwtService } from "@nestjs/jwt";
 import { Roles } from "src/decorators/roles.decorators";
 import { PrismaService } from "src/prisma/prisma.service";
 
+//a more complex guard that validates jwt token in header and returning the full user details and patch to request
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(
@@ -73,7 +74,7 @@ export class RolesGuard implements CanActivate {
         }, HttpStatus.UNAUTHORIZED);
       }
       
-      if (!roles.includes(user.profile.profiletype)) {
+      if (!roles.includes(user.profile.profiletype)) { //based on role decorator value, match the user profile type
         throw new HttpException({
           message: "User does not have access to this resource",
           statusText: "error",

@@ -56,11 +56,15 @@ export class BlogsService {
 
   async UpdateBlog(id: number, req: UpdateBlogDto): Promise<standardResponse | HttpException> {
     try {
+      const isEmployee = this.request.user.profile.profiletype === "employee" || this.request.user.profile.profiletype === "admin"
+
       const update = await this.prismaService.blogs.update({
         where: {
           id
         }, data: {
           ...req,
+          blogstatus: !isEmployee ? `draft` : undefined, //set post to draft if it's updated by a non employee,
+          approved: isEmployee,
           updatedat: NOW()
         }
       })

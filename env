@@ -1,0 +1,14 @@
+PORT=
+NODE_ENV=
+
+#DB Connections
+DATABASE_URL=
+DIRECT_DATABASE_URL=
+
+#auth 512 aiblog
+BASIC_TOKEN=
+
+JWT_SECRET=
+
+#JWT
+ISSUER=

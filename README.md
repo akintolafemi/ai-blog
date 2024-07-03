@@ -22,14 +22,44 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+## Project Name
+
+AI-Blog
+
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This project is built using [Nest](https://github.com/nestjs/nest) [Prisma Client](https://www.prisma.io) as the database ORM. The chosen database is MySQL, and user authentication is handled with JWT using the RS256 algorithm with private and public keys
+
+## Getting Started
+
+To get a local copy of the project up and running, follow these simple steps.
+
+### Prerequisites
+
+- Node.js
+- npm or yarn
+- MySQL
+
+## Clone Repo
+
+```bash
+$ git clone https://github.com/akintolafemi/ai-blog.git
+```
+
+## Set up Environment
+
+Expected environment variables are in file named env
 
 ## Installation
 
 ```bash
 $ npm install
+```
+
+## Prisma client setup
+
+```bash
+$ npx prisma db push && npx prisma generate
 ```
 
 ## Running the app

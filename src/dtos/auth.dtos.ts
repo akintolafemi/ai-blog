@@ -1,5 +1,5 @@
 import { ValidatePassword } from "@validators/custom.validator";
-import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsString, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, MinLength } from "class-validator";
 import { PROFILE_TYPES } from "src/constants/auth.constants";
 import { profileType } from "src/types/auth.type";
 
@@ -30,7 +30,7 @@ export class SignUpDto {
   @IsNotEmpty()
   mobile: string //must be valid phone number with country code
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsEnum(PROFILE_TYPES, {
     message: `profile type must be one of ${PROFILE_TYPES.toString()}`
   })

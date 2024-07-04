@@ -14,6 +14,7 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import type { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { HelpersModule } from './helpers/helpers.module';
 
 declare global {
   interface BigInt {
@@ -60,7 +61,8 @@ BigInt.prototype.toJSON = function () {
         subject: `${process.env.ISSUER}`
       }
     }),
-    BlogsModule
+    BlogsModule,
+    HelpersModule
   ],
   controllers: [AppController],
   providers: [

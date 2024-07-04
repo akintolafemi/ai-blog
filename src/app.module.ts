@@ -35,11 +35,10 @@ BigInt.prototype.toJSON = function () {
       ttl: 20000,
       limit: 5,  //1 request per 5secs
     }]),
-    // CacheModule.register<RedisClientOptions>({ //uncomment to use caching with redis
-    //   ttl: 10,
-    //   // store: redisStore,
-      
-    // }),
+    CacheModule.register({ //can use redis for caching but defualt to memory
+      ttl: 10, //set cache data duration to 10secs,
+      isGlobal: true //cache all get endpoints
+    }),
     AuthModule,
     PrismaModule,
     JwtModule.register({ //handle/configure JWT rules
@@ -70,11 +69,11 @@ BigInt.prototype.toJSON = function () {
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard
-    }
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: CacheInterceptor,
-    // },
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
   ],
 })
 

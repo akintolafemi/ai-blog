@@ -35,6 +35,9 @@ model blogs {
 }
 
 //define users table
+//Separate users and profiles model for the following reasones
+//1. Sensitive user data such as email and password (although hashed) are not returned in requests
+//2. more importantly, this allows a single user have multiple profiles if need be. While every other thing is attached to each profile id
 model users {
   id                     Int        @id @default(autoincrement()) @db.UnsignedInt
   emailaddress               String     @unique @db.VarChar(50)

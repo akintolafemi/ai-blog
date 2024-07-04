@@ -31,6 +31,13 @@ export class SignUpMiddleware implements NestMiddleware {
         }
       }
     })
+    if (emailExist) {
+      throw new HttpException({
+        message: "email address already in use",
+        statusText: "error",
+        status: HttpStatus.CONFLICT
+      }, HttpStatus.CONFLICT);
+    }
 
     if (!mobile) {
       throw new HttpException({
